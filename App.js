@@ -15,6 +15,7 @@ export default function App() {
     if (enteredTaskText.trim().length === 0) {
       return;
     }
+
     setTasks((currentTasks) => [
       ...currentTasks,
       { id: Math.random().toString(), text: enteredTaskText },
@@ -22,6 +23,13 @@ export default function App() {
 
     setEnteredTaskText('');
   }
+
+  function deleteTaskHandler(id) {
+  setTasks((currentTasks) => {
+    return currentTasks.filter((task) => task.id !== id);
+  });
+  }
+
 
   return (
     <SafeAreaView style={styles.appContainer}>
@@ -42,7 +50,13 @@ export default function App() {
       <View style={styles.listContainer}>
         <FlatList
           data={tasks}
-          renderItem={({ item }) => <TodoItem text={item.text} />}
+          renderItem={({ item }) => (
+            <TodoItem
+              text={item.text}
+              id={item.id}
+              onDelete={deleteTaskHandler}
+            />
+          )}
           keyExtractor={(item) => item.id}
           ListEmptyComponent={
             <Text style={styles.emptyText}>No tasks yet. Add one!</Text>
@@ -50,6 +64,8 @@ export default function App() {
         />
       </View>
     </View>
+
+
     </SafeAreaView>
   );
 }
@@ -89,6 +105,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontSize: 16,
   },
+
   listContainer: {
     flex: 5,
   },
