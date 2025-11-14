@@ -1,7 +1,28 @@
+import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
+  const [enteredTaskText, setEnteredTaskText] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  function taskInputHandler(enteredText) {
+    setEnteredTaskText(enteredText);
+  }
+
+  function addTaskHandler() {
+    if (enteredTaskText.trim().length === 0) {
+      return;
+    }
+
+    setTasks((currentTasks) => [
+      ...currentTasks,
+      { id: Math.random().toString(), text: enteredTaskText },
+    ]);
+
+    setEnteredTaskText('');
+  }
+
   return (
     <SafeAreaView style={styles.appContainer}>
       <View style={styles.contentContainer}>
@@ -10,6 +31,7 @@ export default function App() {
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   appContainer: {
@@ -28,3 +50,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+
