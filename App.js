@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import TodoItem from './components/TodoItem';
 
 export default function App() {
   const [enteredTaskText, setEnteredTaskText] = useState('');
@@ -14,7 +15,6 @@ export default function App() {
     if (enteredTaskText.trim().length === 0) {
       return;
     }
-
     setTasks((currentTasks) => [
       ...currentTasks,
       { id: Math.random().toString(), text: enteredTaskText },
@@ -38,9 +38,18 @@ export default function App() {
         />
         <Button title="Add" onPress={addTaskHandler} />
       </View>
+
+      <View style={styles.listContainer}>
+        <FlatList
+          data={tasks}
+          renderItem={({ item }) => <TodoItem text={item.text} />}
+          keyExtractor={(item) => item.id}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No tasks yet. Add one!</Text>
+          }
+        />
+      </View>
     </View>
-
-
     </SafeAreaView>
   );
 }
@@ -79,7 +88,14 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginRight: 10,
     fontSize: 16,
-  }
+  },
+  listContainer: {
+    flex: 5,
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 16,
+    color: '#888',
+  },
 });
-
-
